@@ -9,7 +9,6 @@ enterButton.addEventListener('click', function(e) {
     return;
   }
   e.preventDefault();
-  setTextInput();
   createEntry();
 });
 
@@ -54,10 +53,54 @@ function createEntry() {
   parentContainer.appendChild(newDiv);
 
   newDiv.setAttribute('class', 'new-entry');
-  newDiv.innerHTML = currentInput + ' for ' + currentDuration + ' mins';
+  setTextInput(newDiv)
+  appendStopwatch(newDiv);
 }
 
-function setTextInput() {
+function setTextInput(element) {
   const textInput = document.getElementById('task-title-input');
   currentInput = textInput.value;
+  element.innerHTML = currentInput + ' for ' + currentDuration + ' mins';
+}
+
+// stopwatch
+let currentMilisecond = 0;
+let currentSecond = 0;
+let currentMinute = currentDuration;
+
+function appendStopwatch(element) {
+  const newDiv = document.createElement('div');
+  element.appendChild(newDiv);
+  newDiv.setAttribute('class', 'stopwatch-container');
+
+  appendMinutes(newDiv);
+  appendSeconds(newDiv);
+  appendMiliseconds(newDiv);
+}
+
+function appendMiliseconds(parent) {
+  const newSpan = document.createElement('span');
+  parent.appendChild(newSpan);
+
+  newSpan.setAttribute('class', 'stopwatch-display');
+  newSpan.classList.add('miliseconds');
+  newSpan.innerHTML = currentMilisecond;
+}
+
+function appendSeconds(parent) {
+  const newSpan = document.createElement('span');
+  parent.appendChild(newSpan);
+
+  newSpan.setAttribute('class', 'stopwatch-display');
+  newSpan.classList.add('seconds');
+  newSpan.innerHTML = currentSecond;
+}
+
+function appendMinutes(parent) {
+  const newSpan = document.createElement('span');
+  parent.appendChild(newSpan);
+
+  newSpan.setAttribute('class', 'stopwatch-display');
+  newSpan.classList.add('minutes');
+  newSpan.innerHTML = currentDuration;
 }
