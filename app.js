@@ -1,11 +1,6 @@
 //DOM Cache
 const parentContainer = document.querySelector('.clock-container');
 const enterButton = document.getElementById('enter-button');
-
-const fifteenMins = document.getElementById('fifteenMins');
-const twentyMins = document.getElementById('twentyMins');
-const fortyMins = document.getElementById('fortyMins');
-const oneHour = document.getElementById('oneHour');
 const selectionArray = document.getElementsByClassName('selection');
 
 //event listeners
