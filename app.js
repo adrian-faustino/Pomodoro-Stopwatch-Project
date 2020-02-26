@@ -3,6 +3,13 @@ const parentContainer = document.querySelector('.clock-container');
 const enterButton = document.getElementById('enter-button');
 const selectionArray = document.getElementsByClassName('selection');
 
+// clock
+let currentDuration = 0;
+let currentInput = '';
+let currentMilisecond = 0;
+let currentSecond = 0;
+let currentMinute = currentDuration;
+
 //event listeners
 enterButton.addEventListener('click', function(e) {
   if (currentDuration == 0) {
@@ -19,10 +26,6 @@ for (let i = 0; i < selectionArray.length; i++) {
     setDuration(currentButton);
   });
 }
-
-// clock
-let currentDuration = 0;
-let currentInput = '';
 
 function highlightButton(element) {
   for (let i = 0; i < selectionArray.length; i++) {
@@ -48,13 +51,19 @@ function setDuration(element) {
   }
 }
 
-function createEntry() {
+function createEntry() {  
   const newDiv = document.createElement('div');
   parentContainer.appendChild(newDiv);
 
   newDiv.setAttribute('class', 'new-entry');
   setTextInput(newDiv)
   appendStopwatch(newDiv);
+  
+  newDiv.addEventListener('click', () => {
+    let interval = setInterval(function() {
+      startStopwatch(newDiv);
+    }, 1000);
+  });
 }
 
 function setTextInput(element) {
@@ -63,11 +72,7 @@ function setTextInput(element) {
   element.innerHTML = currentInput + ' for ' + currentDuration + ' mins';
 }
 
-// stopwatch
-let currentMilisecond = 0;
-let currentSecond = 0;
-let currentMinute = currentDuration;
-
+// stopwatch append
 function appendStopwatch(element) {
   const newDiv = document.createElement('div');
   element.appendChild(newDiv);
@@ -103,4 +108,16 @@ function appendMinutes(parent) {
   newSpan.setAttribute('class', 'stopwatch-display');
   newSpan.classList.add('minutes');
   newSpan.innerHTML = currentDuration;
+}
+
+// stopwatch on click
+function startStopwatch(parent) {
+  currentSecond++;
+  updateStopwatch(parent);
+}
+
+function updateStopwatch(parent) {
+  parent.querySelector('.minutes').innerHTML = currentMinute;
+  parent.querySelector('.seconds').innerHTML = currentSecond;
+  parent.querySelector('.miliseconds').innerHTML = currentMilisecond;
 }
