@@ -1,24 +1,19 @@
-//DOM Cache
-const parentContainer = document.querySelector('.clock-container');
-const enterButton = document.getElementById('enter-button');
+//Dom cache
+const addButton = document.getElementById('enter-button');
+const clockContainer = document.querySelector('.clock-container');
 const selectionArray = document.getElementsByClassName('selection');
 
-// clock
-let currentDuration = 0;
-let currentInput = '';
-let currentMilisecond = 0;
-let currentSecond = 0;
-let currentMinute = currentDuration;
+//variables
+let currentDuration; //this is set by setDuration()
 
-//event listeners
-enterButton.addEventListener('click', function(e) {
-  if (currentDuration == 0) {
-    return;
-  }
+//event listener
+addButton.addEventListener('click', (e) => {
+  //add check here later, if input empty dont
   e.preventDefault();
-  createEntry();
+  addEntry();
 });
 
+//selection buttons
 for (let i = 0; i < selectionArray.length; i++) {
   let currentButton = selectionArray[i];
   currentButton.addEventListener('click', () => {
@@ -51,73 +46,52 @@ function setDuration(element) {
   }
 }
 
-function createEntry() {  
-  const newDiv = document.createElement('div');
-  parentContainer.appendChild(newDiv);
-
-  newDiv.setAttribute('class', 'new-entry');
-  setTextInput(newDiv)
-  appendStopwatch(newDiv);
-  
-  newDiv.addEventListener('click', () => {
-    let interval = setInterval(function() {
-      startStopwatch(newDiv);
-    }, 1000);
-  });
-}
-
 function setTextInput(element) {
   const textInput = document.getElementById('task-title-input');
   currentInput = textInput.value;
   element.innerHTML = currentInput + ' for ' + currentDuration + ' mins';
 }
 
-// stopwatch append
-function appendStopwatch(element) {
-  const newDiv = document.createElement('div');
-  element.appendChild(newDiv);
-  newDiv.setAttribute('class', 'stopwatch-container');
-
-  appendMinutes(newDiv);
-  appendSeconds(newDiv);
-  appendMiliseconds(newDiv);
+function createElement(element, className, parentDiv) {
+  let newDiv = document.createElement(element);
+  parentDiv.appendChild(newDiv);
+  newDiv.classList.add(className);
+  return newDiv;
 }
 
-function appendMiliseconds(parent) {
-  const newSpan = document.createElement('span');
-  parent.appendChild(newSpan);
+//stop watch
+function addEntry() {
+  let newDiv = createElement('div', 'new-entry', clockContainer);
 
-  newSpan.setAttribute('class', 'stopwatch-display');
-  newSpan.classList.add('miliseconds');
-  newSpan.innerHTML = currentMilisecond;
+  //text input within the new entry
+  let description = createElement('div', 'stopwatch-description', newDiv);
+  setTextInput(description);
+
+  //stopwatch within the new entry
+  let stopwatchContainer = createElement('div', 'stopwatch-container', newDiv);
+  createElement('span', 'minutes', stopwatchContainer);
+  createElement('span', 'seconds', stopwatchContainer);
+  createElement('span', 'miliseconds', stopwatchContainer);
+
+  //create new object stopwatch
+  let stopwatch = new Stopwatch(newDiv);
+  newDiv.addEventListener('click', () => {
+    stopwatch.increaseSecond();
+  });
 }
 
-function appendSeconds(parent) {
-  const newSpan = document.createElement('span');
-  parent.appendChild(newSpan);
+//stopwatch constructor
+function Stopwatch(div) {
+  let minute = 0;
+  let min_span = div.querySelector('.minutes');
 
-  newSpan.setAttribute('class', 'stopwatch-display');
-  newSpan.classList.add('seconds');
-  newSpan.innerHTML = currentSecond;
+  this.increaseSecond = function() {
+    minute++;
+    updateDisplay();
+  };
+
+  function updateDisplay() {
+    min_span.innerHTML = minute;
+  }
 }
 
-function appendMinutes(parent) {
-  const newSpan = document.createElement('span');
-  parent.appendChild(newSpan);
-
-  newSpan.setAttribute('class', 'stopwatch-display');
-  newSpan.classList.add('minutes');
-  newSpan.innerHTML = currentDuration;
-}
-
-// stopwatch on click
-function startStopwatch(parent) {
-  currentSecond++;
-  updateStopwatch(parent);
-}
-
-function updateStopwatch(parent) {
-  parent.querySelector('.minutes').innerHTML = currentMinute;
-  parent.querySelector('.seconds').innerHTML = currentSecond;
-  parent.querySelector('.miliseconds').innerHTML = currentMilisecond;
-}
