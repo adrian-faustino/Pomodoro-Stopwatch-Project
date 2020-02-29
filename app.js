@@ -81,6 +81,12 @@ function addEntry() {
   createElement('span', 'seconds', stopwatchContainer);
   createElement('span', 'miliseconds', stopwatchContainer);
 
+  //delete button
+  let delete_button = createElement('div', 'delete-button', newDiv);
+  delete_button.addEventListener('click', () => {
+    clockContainer.removeChild(newDiv);
+  });
+
   //create new object stopwatch
   let stopwatch = new Stopwatch(newDiv);
   stopwatch.setDisplay();
@@ -168,3 +174,4 @@ function Stopwatch(div) {
   }
 }
 
+//delete button
