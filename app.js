@@ -1,5 +1,5 @@
 //Dom cache
-const addButton = document.getElementById('enter-button');
+const addButton = document.querySelector('.enter-button');
 const clockContainer = document.querySelector('.clock-container');
 const selectionArray = document.getElementsByClassName('selection');
 
@@ -11,6 +11,7 @@ addButton.addEventListener('click', (e) => {
   //add check here later, if input empty dont
   e.preventDefault();
   addEntry();
+  animateButtonClick(addButton);
 });
 
 //selection buttons
@@ -20,6 +21,13 @@ for (let i = 0; i < selectionArray.length; i++) {
     highlightButton(currentButton);
     setDuration(currentButton);
   });
+}
+
+function animateButtonClick(element) {
+  element.classList.add('active');
+  setTimeout(() => {
+    element.classList.remove('active');
+  }, 700);
 }
 
 function highlightButton(element) {
@@ -77,6 +85,7 @@ function addEntry() {
   let stopwatch = new Stopwatch(newDiv);
   stopwatch.setDisplay();
   newDiv.addEventListener('click', () => {
+    newDiv.classList.toggle('active');
     if (stopwatch.isOn) {
       stopwatch.stop();
     } else {
@@ -112,7 +121,6 @@ function Stopwatch(div) {
 
   function setZero(num) {
     let numStr = num.toString();
-    console.log(numStr.length);
     if (numStr.length == 1) {
       numStr = '0' + numStr;
     }
@@ -134,7 +142,7 @@ function Stopwatch(div) {
   };
 
   function reduceMilisecond() {
-    if (milisecond <= 0) {
+    if (milisecond == 0) {
       milisecond = 99;
       reduceSecond();
     } else {
