@@ -141,7 +141,7 @@
 }
 
 /* stopwatch */
-.stopwatch-display {
+.minutes, .seconds, .miliseconds {
   justify-content: flex-end;
   padding: 0 5px;
   background-color: white;

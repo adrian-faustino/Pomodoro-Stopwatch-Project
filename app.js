@@ -61,37 +61,102 @@ function createElement(element, className, parentDiv) {
 
 //stop watch
 function addEntry() {
-  let newDiv = createElement('div', 'new-entry', clockContainer);
+  const newDiv = createElement('div', 'new-entry', clockContainer);
 
   //text input within the new entry
-  let description = createElement('div', 'stopwatch-description', newDiv);
+  const description = createElement('div', 'stopwatch-description', newDiv);
   setTextInput(description);
 
-  //stopwatch within the new entry
-  let stopwatchContainer = createElement('div', 'stopwatch-container', newDiv);
+  //create the stopwatch container and all the elements inside it
+  const stopwatchContainer = createElement('div', 'stopwatch-container', newDiv);
   createElement('span', 'minutes', stopwatchContainer);
   createElement('span', 'seconds', stopwatchContainer);
   createElement('span', 'miliseconds', stopwatchContainer);
 
   //create new object stopwatch
   let stopwatch = new Stopwatch(newDiv);
+  stopwatch.setDisplay();
   newDiv.addEventListener('click', () => {
-    stopwatch.increaseSecond();
+    if (stopwatch.isOn) {
+      stopwatch.stop();
+    } else {
+      stopwatch.start();
+    }
   });
 }
 
 //stopwatch constructor
 function Stopwatch(div) {
-  let minute = 0;
-  let min_span = div.querySelector('.minutes');
+  let minute = currentDuration;
+  let second = 0;
+  let milisecond = 0;
+  this.isOn = false;
+  let interval;
 
-  this.increaseSecond = function() {
-    minute++;
-    updateDisplay();
-  };
+  //DOM cache
+  let min_span = div.querySelector('.minutes');
+  let second_span = div.querySelector('.seconds');
+  let milisecond_span = div.querySelector('.miliseconds');
 
   function updateDisplay() {
-    min_span.innerHTML = minute;
+    min_span.innerHTML = setZero(minute);
+    second_span.innerHTML = setZero(second);
+    milisecond_span.innerHTML = setZero(milisecond);
+  }
+
+  this.setDisplay = function() {
+    min_span.innerHTML = setZero(minute);
+    second_span.innerHTML = setZero(second);
+    milisecond_span.innerHTML = setZero(milisecond);
+  };
+
+  function setZero(num) {
+    let numStr = num.toString();
+    console.log(numStr.length);
+    if (numStr.length == 1) {
+      numStr = '0' + numStr;
+    }
+    return numStr;
+  }
+
+  //stopwatch start stop functions
+  this.start = function() {
+    this.isOn = true;
+    interval = setInterval(() => {
+      reduceMilisecond();
+      updateDisplay();
+    }, 10);
+  };
+
+  this.stop = function() {
+    this.isOn = false;
+    clearInterval(interval);
+  };
+
+  function reduceMilisecond() {
+    if (milisecond <= 0) {
+      milisecond = 99;
+      reduceSecond();
+    } else {
+      milisecond -= 1;
+    }
+  }
+
+  function reduceSecond() {
+    if (second == 0) {
+      reduceMinute();
+      second = 59;
+    } else {
+      second--;
+    }
+  }
+
+  function reduceMinute() {
+    if (minute == 0) {
+      this.stop();
+    } else {
+      minute--;
+    }
   }
 }
 
