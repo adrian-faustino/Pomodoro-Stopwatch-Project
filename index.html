@@ -11,15 +11,15 @@
 <body>
   <div class="wrapper">
     <div class="clock-container">
-      <span>Enter a task:</span>
+      <span class="input-prompt">Enter a task:</span>
 
-      <form>
+      <form autocomplete="off">
         <input id="task-title-input" type="text" required>
         <button type="submit" class="enter-button"></button>
       </form>
 
       <div class="time-selection-container">
-        <div class="selection" id="fifteenMins">15 mins</div>
+        <div class="selection active" id="fifteenMins">15 mins</div>
         <div class="selection" id="twentyMins">20 mins</div>
         <div class="selection" id="fortyMins">30 mins</div>
         <div class="selection" id="oneHour">60 mins</div>

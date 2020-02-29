@@ -218,3 +218,47 @@
 .delete-button:hover::after {
   background: rgba(255, 0, 0, 0.801);
 }
+
+/* input prompt error animation */
+span.input-prompt.active {
+  animation: empty-field-error 0.5s;
+}
+.enter-button.error {
+  animation: empty-field-error2 0.5s;
+}
+
+@keyframes empty-field-error {
+  0% {
+    color: red;
+  }
+  25% {
+    color: white;
+  }
+  50% {
+    color: salmon;
+  }
+  75% {
+    color: white;
+  }
+  100% {
+    color: red;
+  }
+}
+
+@keyframes empty-field-error2 {
+  0% {
+    background-color: red;
+  }
+  25% {
+    background-color: white;
+  }
+  50% {
+    background-color: salmon;
+  }
+  75% {
+    background-color: white;
+  }
+  100% {
+    background-color: red;
+  }
+}

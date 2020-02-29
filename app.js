@@ -2,16 +2,22 @@
 const addButton = document.querySelector('.enter-button');
 const clockContainer = document.querySelector('.clock-container');
 const selectionArray = document.getElementsByClassName('selection');
+const textInput = document.getElementById('task-title-input');
+const inputPrompt_span = document.querySelector('.input-prompt');
 
 //variables
-let currentDuration; //this is set by setDuration()
+let currentDuration = 15; //this is set by setDuration() defaulting at 15
 
 //event listener
 addButton.addEventListener('click', (e) => {
   //add check here later, if input empty dont
   e.preventDefault();
+  if (textInput.value == '') {
+    return emptyTextError() 
+  }
   addEntry();
   animateButtonClick(addButton);
+  textInput.value = '';
 });
 
 //selection buttons
@@ -21,6 +27,15 @@ for (let i = 0; i < selectionArray.length; i++) {
     highlightButton(currentButton);
     setDuration(currentButton);
   });
+}
+
+function emptyTextError() {
+  inputPrompt_span.classList.add('active');
+  addButton.classList.add('error')
+  setTimeout(() => {
+    inputPrompt_span.classList.remove('active');
+    addButton.classList.remove('error');
+  }, 700);
 }
 
 function animateButtonClick(element) {
@@ -55,7 +70,6 @@ function setDuration(element) {
 }
 
 function setTextInput(element) {
-  const textInput = document.getElementById('task-title-input');
   currentInput = textInput.value;
   element.innerHTML = currentInput + ' for ' + currentDuration + ' mins';
 }
